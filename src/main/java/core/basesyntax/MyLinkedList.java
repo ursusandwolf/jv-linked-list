@@ -54,36 +54,82 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
 
     @Override
     public void addAll(List<T> list) {
+        for (T t : list) {
+            add(t);
+        }
     }
 
     @Override
     public T get(int index) {
-        return null;
+        checkPositionIndex(index);
+        return node(index).item;
     }
 
     @Override
     public T set(T value, int index) {
-        return null;
+        checkPositionIndex(index);
+        return node(index).item = value;
     }
 
     @Override
     public T remove(int index) {
-        return null;
+        checkPositionIndex(index);
+        return unlink(node(index));
     }
 
     @Override
     public boolean remove(T object) {
+        if (object == null) {
+            for (Node<T> x = first; x != null; x = x.next) {
+                if (x.item == null) {
+                    unlink(x);
+                    return true;
+                }
+            }
+        } else {
+            for (Node<T> x = first; x != null; x = x.next) {
+                if (object.equals(x.item)) {
+                    unlink(x);
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+
+    private T unlink(Node<T> x) {
+        // assert x != null;
+        final T element = x.item;
+        final Node<T> next = x.next;
+        final Node<T> prev = x.prev;
+
+        if (prev == null) {
+            first = next;
+        } else {
+            prev.next = next;
+            x.prev = null;
+        }
+
+        if (next == null) {
+            last = prev;
+        } else {
+            next.prev = prev;
+            x.next = null;
+        }
+
+        x.item = null;
+        size--;
+        return element;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     private void linkFirst(T e) {
@@ -124,7 +170,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     }
 
     private static class Node<E> {
-        private final E item;
+        private E item;
         private Node<E> next;
         private Node<E> prev;
 
@@ -133,6 +179,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
             this.next = next;
             this.prev = prev;
         }
+
     }
 
     public static void main(String[] args) {
