@@ -12,10 +12,44 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
 
     @Override
     public void add(T value) {
+        linkLast(value);
     }
 
     @Override
     public void add(T value, int index) {
+        checkPositionIndex(index);
+        if (index == size) {
+            linkLast(value);
+        } else {
+            linkBefore(value, node(index));
+        }
+    }
+
+    private Node<T> node(int index) {
+        // assert isElementIndex(index);
+        if (index < (size >> 1)) {
+            Node<T> x = first;
+            for (int i = 0; i < index; i++) {
+                x = x.next;
+            }
+            return x;
+        } else {
+            Node<T> x = last;
+            for (int i = size - 1; i > index; i--) {
+                x = x.prev;
+            }
+            return x;
+        }
+    }
+
+    private void checkPositionIndex(int index) {
+        if (!isPositionIndex(index)) {
+            throw new ArrayIndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    private boolean isPositionIndex(int index) {
+        return index >= 0 && index <= size;
     }
 
     @Override
@@ -64,6 +98,19 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         size++;
     }
 
+    void linkBefore(T e, Node<T> succ) {
+        // assert succ != null;
+        final Node<T> pred = succ.prev;
+        final Node<T> newNode = new Node<>(pred, e, succ);
+        succ.prev = newNode;
+        if (pred == null) {
+            first = newNode;
+        } else {
+            pred.next = newNode;
+        }
+        size++;
+    }
+
     void linkLast(T e) {
         final Node<T> l = last;
         final Node<T> newNode = new Node<>(l, e, null);
@@ -77,7 +124,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     }
 
     private static class Node<E> {
-        private E item;
+        private final E item;
         private Node<E> next;
         private Node<E> prev;
 
@@ -86,5 +133,17 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
             this.next = next;
             this.prev = prev;
         }
+    }
+
+    public static void main(String[] args) {
+        MyLinkedList<Integer> numbers = new MyLinkedList<>();
+        System.out.println(numbers);
+        numbers.add(10);
+        System.out.println(numbers);
+        numbers.add(20);
+        numbers.add(30);
+        numbers.add(1,1);
+        numbers.add(0,0);
+
     }
 }
