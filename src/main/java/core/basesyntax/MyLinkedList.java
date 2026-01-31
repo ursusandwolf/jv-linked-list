@@ -149,20 +149,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         return size == 0;
     }
 
-    private void linkFirst(T e) {
-        final Node<T> f = first;
-        final Node<T> newNode = new Node<>(null, e, f);
-        first = newNode;
-        if (f == null) {
-            last = newNode;
-        } else {
-            f.prev = newNode;
-        }
-        size++;
-    }
-
     void linkBefore(T e, Node<T> succ) {
-        // assert succ != null;
         final Node<T> pred = succ.prev;
         final Node<T> newNode = new Node<>(pred, e, succ);
         succ.prev = newNode;
@@ -196,18 +183,6 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
             this.next = next;
             this.prev = prev;
         }
-
-    }
-
-    public static void main(String[] args) {
-        MyLinkedList<Integer> numbers = new MyLinkedList<>();
-        System.out.println(numbers);
-        numbers.add(10);
-        System.out.println(numbers);
-        numbers.add(20);
-        numbers.add(30);
-        numbers.add(1, 1);
-        numbers.add(0, 0);
 
     }
 }
