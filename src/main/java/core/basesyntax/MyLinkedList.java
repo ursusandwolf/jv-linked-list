@@ -42,14 +42,28 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         }
     }
 
-    private void checkPositionIndex(int index) {
-        if (!isPositionIndex(index)) {
-            throw new ArrayIndexOutOfBoundsException("Index: " + index + ", Size: " + size);
-        }
+    private boolean isElementIndex(int index) {
+        return index >= 0 && index < size;
     }
 
     private boolean isPositionIndex(int index) {
         return index >= 0 && index <= size;
+    }
+
+    private String outOfBoundsMsg(int index) {
+        return "Index: " + index + ", Size: " + size;
+    }
+
+    private void checkElementIndex(int index) {
+        if (!isElementIndex(index)) {
+            throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+        }
+    }
+
+    private void checkPositionIndex(int index) {
+        if (!isPositionIndex(index)) {
+            throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+        }
     }
 
     @Override
@@ -61,19 +75,19 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
 
     @Override
     public T get(int index) {
-        checkPositionIndex(index);
+        checkElementIndex(index);
         return node(index).item;
     }
 
     @Override
     public T set(T value, int index) {
-        checkPositionIndex(index);
+        checkElementIndex(index);
         return node(index).item = value;
     }
 
     @Override
     public T remove(int index) {
-        checkPositionIndex(index);
+        checkElementIndex(index);
         return unlink(node(index));
     }
 
@@ -189,8 +203,8 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         System.out.println(numbers);
         numbers.add(20);
         numbers.add(30);
-        numbers.add(1,1);
-        numbers.add(0,0);
+        numbers.add(1, 1);
+        numbers.add(0, 0);
 
     }
 }
