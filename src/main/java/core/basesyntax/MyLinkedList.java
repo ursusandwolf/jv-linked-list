@@ -1,10 +1,14 @@
 package core.basesyntax;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class MyLinkedList<T> implements MyLinkedListInterface<T> {
-    List l;
+    /**
+     * Pointers to first and last node.
+     */
+    private Node<T> first;
+    private Node<T> last;
+    private int size = 0;
 
     @Override
     public void add(T value) {
@@ -48,10 +52,34 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         return false;
     }
 
+    private void linkFirst(T e) {
+        final Node<T> f = first;
+        final Node<T> newNode = new Node<>(null, e, f);
+        first = newNode;
+        if (f == null) {
+            last = newNode;
+        } else {
+            f.prev = newNode;
+        }
+        size++;
+    }
+
+    void linkLast(T e) {
+        final Node<T> l = last;
+        final Node<T> newNode = new Node<>(l, e, null);
+        last = newNode;
+        if (l == null) {
+            first = newNode;
+        } else {
+            l.next = newNode;
+        }
+        size++;
+    }
+
     private static class Node<E> {
-        E item;
-        Node<E> next;
-        Node<E> prev;
+        private E item;
+        private Node<E> next;
+        private Node<E> prev;
 
         Node(Node<E> prev, E element, Node<E> next) {
             this.item = element;
